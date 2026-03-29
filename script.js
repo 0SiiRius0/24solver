@@ -71,21 +71,20 @@ def solve_24(nums):
 
 async function run() {
     const out = document.getElementById("out");
-
     if (!pyodideReady) {
         out.textContent = "Loading Python...";
         return;
     }
+    const input = document.getElementById("nums").value.trim();
+    const nums = input.split(/[\s,]+/).map(Number).filter(n => !isNaN(n));
 
-    const input = document.getElementById("nums").value;
-    const nums = input.split(",").map(Number);
+    if (nums.length !== 4) {
+        out.textContent = "Please enter exactly 4 numbers.";
+        return;
+    }
 
     try {
-        // Call Python function
-        const result = await pyodide.runPythonAsync(`
-solve_24(${JSON.stringify(nums)})
-    `);
-
+        const result = await pyodide.runPythonAsync(`solve_24(${JSON.stringify(nums)})`);
         out.textContent = result || "No solution";
     } catch (e) {
         out.textContent = "Error: " + e;
